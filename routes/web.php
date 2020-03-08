@@ -16,5 +16,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function(){
 	return view('welcome');
 });
+Route::get('/login', 'LoginController@create')->name('login');
+Route::get('/register', 'RegisterController@create')->name('register');
+Route::post('/register', 'RegisterController@store');
 
 Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+
+Route::get('/user/active/{token}', 'RegisterController@activeUser');

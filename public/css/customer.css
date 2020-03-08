@@ -1,0 +1,16 @@
+.content-wrapper{
+	margin: 0px !important;
+		
+}
+.content-wrapper form{
+	width: 50% !important;
+	margin: 0px auto !important;
+	padding-top: 20px !important;
+}
+.content-wrapper h2{
+	text-align: center;
+}
+.main-footer{
+	width: 100% !important;
+	margin-left: 0px !important;
+}
