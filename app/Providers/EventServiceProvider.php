@@ -17,7 +17,6 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         'App\Events\NewUserHasRegistedEvent' => [
             'App\Listeners\ActivationNewUserListener',
-            'App\Listeners\NewUserSessionListener',
         ],
     ];
 

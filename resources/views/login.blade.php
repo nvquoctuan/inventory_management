@@ -2,8 +2,14 @@
 @section('title', 'Login')
 @section('content')
 <h2 style="text-align: center">Login</h2>
+@if(session('message'))
+  <div class="alert alert-{{ @session('type') }}">
+    {{ session('message') }}
+  </div>
+@endif
 <!-- form start -->
 <form action="/login" role="form" id="quickForm" method="POST">
+  @csrf
   <div class="card-body">
     <div class="form-group">
       <label for="exampleInputEmail1">Email address</label>
@@ -21,8 +27,8 @@
     </div>
     <div class="form-group mb-0">
       <div class="custom-control custom-checkbox">
-        <input type="checkbox" name="terms" class="custom-control-input" id="remember">
-        <label class="custom-control-label" for="exampleCheck1">Remember me.</label>
+        <input type="checkbox" name="remember" class="form-check-input" id="remember">
+       <label class="form-check-label" for="exampleCheck1">Remember me</label>
       </div>
     </div>
   </div>

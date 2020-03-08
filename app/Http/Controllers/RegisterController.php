@@ -26,14 +26,12 @@ class RegisterController extends Controller
 	 * @return Response
 	 */
     public function store(RegisterRequest $request){
-    	$email = $request->input("email");
-    	$name = $request->input("name");
     	$password = $request->input("password");
     	$token = Str::random(30);
 
     	$user = new User([
-    		"email" => $email,
-    		"name" => $name,
+    		"email" => $request->input("email"),
+    		"name" => $request->input("name"),
     		"password" => Hash::make($password),
     		"activate_digest" => Hash::make($token),
     	]);
@@ -42,25 +40,27 @@ class RegisterController extends Controller
     
     	event(new NewUserHasRegistedEvent($user, $token));
 
-    	return redirect()->route('dashboard');
+    	return redirect()->route('login')->with(['message' => 'Please active account', 'type' => 'warning']);
     }
 
     private function getUser($email){
     	return \App\User::where('email', $email)->first();
     }
 
-    public function activeUser(Request $request, $token){
-    	$user_id = $request->session()->get('user');
-    	$activate_digest = DB::table('users')->where('id', $user_id)->value('activate_digest');
-    	if(Hash::check($token, $activate_digest)){
+    public function activeUser(Request $request, $email, $token){
+    	$user = DB::table('users')->where('email', $email)->first();
+    	if(Hash::check($token, $user->activate_digest)){
     		$affected = DB::table('users')
-              ->where('id', $user_id)
+              ->where('id', $user->id)
               ->update(['activate_digest' => "", "activated" => 1]);
             if($affected == 1){
-            	return redirect()->route('dashboard')->with('message', 'Your account activated');
+            	session(['user' => $user->id]);
+            	return redirect()->route('dashboard')->with(['message' => 'Your account activated', 'type' => 'success']);
+            }
+            else{
+            	return redirect()->route('login')->with(['message' => 'Active failed!', 'type' => 'errors']);
             }  
     	}
-    	return redirect()->route('login')->with('message', 'Link active invalid
-    		!');
+    	return redirect()->route('login')->with(['message' => 'Link active invalid!', 'type' => 'warning']);
     }
 }
