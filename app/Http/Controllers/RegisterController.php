@@ -43,10 +43,6 @@ class RegisterController extends Controller
     	return redirect()->route('login')->with(['message' => 'Please active account', 'type' => 'warning']);
     }
 
-    private function getUser($email){
-    	return \App\User::where('email', $email)->first();
-    }
-
     public function activeUser(Request $request, $email, $token){
     	$user = DB::table('users')->where('email', $email)->first();
     	if(Hash::check($token, $user->activate_digest)){

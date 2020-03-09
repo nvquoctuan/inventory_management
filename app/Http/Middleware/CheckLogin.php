@@ -31,4 +31,8 @@ class CheckLogin
 
         return $next($request, $user);
     }
+
+    public function terminate($request, $response){
+        return redirect()->route('dashboard')->with(['message' => 'Login success', 'type' => 'success']);
+    }
 }
